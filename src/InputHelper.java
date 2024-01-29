@@ -217,15 +217,29 @@ public class InputHelper {
         }
     }
 
-    //MAKE BOARD
-    public static String[][] printBoard(){
+    //Clear BOARD
+    public static String[][] clearBoard(){
         String [] [] board = new String [3] [3];
-        String print = "| - ";
+
 
         for (int r = 0; r<board.length; r++) {
             for (int c= 0; c < board[0].length; c++) {
-                board [r][c] = print;
+                board [r][c] = "-";
             }
+        }
+        return board;
+    }
+
+    //Print BOARD
+    public static String[][] printBoard(){
+        String [] [] board = new String [3] [3];
+
+
+        for (int r = 0; r<board.length; r++) {
+            for (int c= 0; c < board[0].length; c++) {
+                System.out.printf(" %s ",board[r][c]);
+            }
+            System.out.printf("\n");
         }
         return board;
     }

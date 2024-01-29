@@ -4,13 +4,13 @@ public class Game {
 
     //Helper Methods
     public static void clearBoard(){
-        InputHelper.printBoard();
+        InputHelper.clearBoard();
     }
-    private static void displayBoard(){
-        InputHelper.printBoard();
-    }
+    private static void displayBoard(){InputHelper.printBoard();}
     private static boolean isValidMove(int row, int col){
         boolean tof = false;
+
+
 
         return tof;
     }
@@ -54,7 +54,8 @@ public class Game {
 
         //This will hold the entire loop of the game itself.
         do {
-            boolean done = false;
+            boolean doneStart = false;
+            boolean donePlay = false;
 
             //THIS DO WHILE DECIDES WHO GOES FIRST
             do {
@@ -64,14 +65,15 @@ public class Game {
                 check = scan.nextInt();
                 if (check == 1 ) {
                     System.out.println("Player 1 (X's) will go first.");
-                    done = true;
+                    doneStart = true;
                 } else if (check == 2){
                     System.out.println("Player 2 (O's) will go first.");
-                    done = true;
+                    doneStart = true;
                 } else {
                     System.out.println("That is not a 1 or a 2, try again.");
                 }
-            } while(!done);
+            } while(!doneStart);
+
 
             displayBoard();
 
