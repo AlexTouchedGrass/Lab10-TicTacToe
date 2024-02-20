@@ -14,11 +14,11 @@ public class InputHelper {
         System.out.println("Your size is " + dSize + ".");
 
         //Range Checker
-        int iRange = getRangedInt(scan,"Please enter an int between 1 and 10.",1,10);
+        int iRange = getRangedInt(scan, "Please enter an int between 1 and 10.", 1, 10);
         System.out.println("Your number is " + iRange + ".");
 
         //Double Range Checker
-        double dRange = getRangedDouble(scan, "Please enter a double between 1 and 10",1.0,10.0);
+        double dRange = getRangedDouble(scan, "Please enter a double between 1 and 10", 1.0, 10.0);
         System.out.println("Your number is " + dRange + ".");
 
         //Social Security Check
@@ -26,7 +26,7 @@ public class InputHelper {
         System.out.println("Your SSN: " + ssn + ".");
 
         //Date Of Birth Check
-        String dob = getRegExString(scan, "Enter your date of birth [mm.dd.yyyy]","\\d{2}.\\d{2}.\\d{4}");
+        String dob = getRegExString(scan, "Enter your date of birth [mm.dd.yyyy]", "\\d{2}.\\d{2}.\\d{4}");
         System.out.println("Your date of birth is " + dob + ".");
 
         //getNonZeroLenString
@@ -38,20 +38,20 @@ public class InputHelper {
         System.out.println("Your string is " + non0Int + ".");
 
         //Y or N Confirm
-        String yesOrNo = getYNConfirm(scan, "Would you like to stop? Yes to stop, no to continue. ( Y or N also works)");
-        System.out.println("You answered " + yesOrNo + ".");
+        boolean yesOrNo = getYNConfirm(scan, "Would you like to stop? Yes to stop, no to continue. ( Y or N also works)");
+        System.exit(0);
 
     }
 
     //GetInt
     //This method loops until a valid integer input is received. Returns int value.
-    public static int getInt(Scanner in, String prompt){
+    public static int getInt(Scanner in, String prompt) {
         boolean done = false;
         int x = 0;
 
         System.out.println(prompt);
-        do{
-            if(in.hasNextInt()){
+        do {
+            if (in.hasNextInt()) {
                 x = in.nextInt();
                 done = true;
             }
@@ -62,13 +62,13 @@ public class InputHelper {
 
     //GetDouble
     //This method loops until a valid double input is received. Returns double value.
-    public static double getDouble(Scanner in, String prompt){
+    public static double getDouble(Scanner in, String prompt) {
         boolean done = false;
         double dGetX = 0;
 
         System.out.println(prompt);
-        do{
-            if(in.hasNextDouble()){
+        do {
+            if (in.hasNextDouble()) {
                 dGetX = in.nextDouble();
                 done = true;
             }
@@ -78,16 +78,16 @@ public class InputHelper {
     }
 
     //Int Ranged
-    public static int getRangedInt(Scanner in, String prompt, int min, int max){
+    public static int getRangedInt(Scanner in, String prompt, int min, int max) {
         boolean done = false;
         int x = 0;
 
         System.out.println(prompt);
-        do{
-            if(in.hasNextInt()){
+        do {
+            if (in.hasNextInt()) {
                 x = in.nextInt();
                 //Check to see if number is in range
-                if (x<= max && x >= min) {
+                if (x <= max && x >= min) {
                     done = true;
                 }
             }
@@ -109,88 +109,91 @@ public class InputHelper {
             } else {
                 System.out.println("Invalid Input.");
             }
-        } while(!done);
+        } while (!done);
         return input;
     }
 
     //Double Ranged
-    public static double getRangedDouble(Scanner in, String prompt, double min, double max){
+    public static double getRangedDouble(Scanner in, String prompt, double min, double max) {
         boolean done = false;
         double dx = 0;
 
         System.out.println(prompt);
-        do{
-            if(in.hasNextDouble()){
+        do {
+            if (in.hasNextDouble()) {
                 dx = in.nextDouble();
                 //Check to see if number is in range
-                if (dx<= max && dx >= min) {
+                if (dx <= max && dx >= min) {
                     done = true;
                 } else {
                     System.out.println("Invalid Input.");
                 }
             }
             in.nextLine();
-        }while(!done);
+        } while (!done);
         return dx;
     }
 
-    public static String getNonZeroLenString(Scanner in, String prompt){
+    public static String getNonZeroLenString(Scanner in, String prompt) {
         boolean done = false;
         String input;
 
         System.out.println(prompt);
-        do{
+        do {
             input = in.nextLine();
-            if(input.length() > 0){
+            if (input.length() > 0) {
                 done = true;
             } else {
                 System.out.println("Error. Blank Space Detected.");
             }
-            in.nextLine();
-        }while(!done);
+            //in.nextLine(); // (NOT NECESSARY ALWAYS, CASE TO CASE BASIS)
+        } while (!done);
         return input;
     }
 
     //Checks that the entered Int is greater than 0 (Only for positive numbers)
-    public static int getNonZeroInt(Scanner in, String prompt){
+    public static int getNonZeroInt(Scanner in, String prompt) {
         boolean done = false;
         int input;
 
         System.out.println(prompt);
-        do{
+        do {
             input = in.nextInt();
-            if(input > 0){
+            if (input > 0) {
                 done = true;
             } else {
                 System.out.println("Error. Either a negative integer or 0 has been entered.");
             }
             in.nextLine();
-        }while(!done);
+        } while (!done);
         return input;
     }
 
-    public static String getYNConfirm(Scanner in, String prompt){
+    public static boolean getYNConfirm(Scanner in, String prompt) {
         boolean done = false;
         String input;
 
+        //This is the return
+        boolean check = false;
+
         System.out.println(prompt);
-        do{
+        do {
             input = in.nextLine();
-            if(input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y")){
-                System.out.println("You will stop.");
-                done = true;
-            } else if (input.equalsIgnoreCase("no") || input.equalsIgnoreCase("n")) {
+            if (input.equalsIgnoreCase("yes") || input.equalsIgnoreCase("y")) {
                 System.out.println("You will continue.");
                 done = true;
+                check = true;
+            } else if (input.equalsIgnoreCase("no") || input.equalsIgnoreCase("n")) {
+                System.out.println("You will stop.");
+                done = true;
             }
-            in.nextLine();
-        }while(!done);
-        return input;
+            // in.nextLine(); NOT NEEDED 
+        } while (!done);
+        return check;
     }
 
-    //PRETTY HEADER
-    public static void getPrettyHeader() {
-        String msg = "Tic-Tac-Toe";
+    //Pretty Header
+    public static void getPrettyHeader(String msg) {
         int leftSpaces = ((54-msg.length())/2);
         int rightSpaces = (54-leftSpaces-msg.length());
 
@@ -205,8 +208,7 @@ public class InputHelper {
         printCharacter("*", 60, false);
     }
 
-
-    //PRINT CHARACTER (MADE FOR PRETTY HEADER)
+    //FOR PRETTY HEADER
     public static void printCharacter(String character, int amount, boolean newLine) {
         for (int i = 0; i < amount; i++) {
             System.out.print(character);
@@ -217,30 +219,8 @@ public class InputHelper {
         }
     }
 
-    //Clear BOARD
-    public static String[][] clearBoard(){
-        String [] [] board = new String [3] [3];
+    //Bold Text
+    public static void boldChar(String character, int amount){
 
-
-        for (int r = 0; r<board.length; r++) {
-            for (int c= 0; c < board[0].length; c++) {
-                board [r][c] = "-";
-            }
-        }
-        return board;
-    }
-
-    //Print BOARD
-    public static String[][] printBoard(){
-        String [] [] board = new String [3] [3];
-
-
-        for (int r = 0; r<board.length; r++) {
-            for (int c= 0; c < board[0].length; c++) {
-                System.out.printf(" %s ",board[r][c]);
-            }
-            System.out.printf("\n");
-        }
-        return board;
     }
 }
