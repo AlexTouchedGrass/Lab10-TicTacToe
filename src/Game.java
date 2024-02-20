@@ -7,32 +7,32 @@ public class Game {
     private static final String[][] gameBoard = new String[ROWS][COLS];
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
 
         // Main game loop
         while (true) {
             initializeGame();
 
             // Players choose symbols (X or O) and the cleared board is displayed
-            String firstPlayerSymbol = getPlayerSymbol(scanner, 1);
-            String secondPlayerSymbol = getPlayerSymbol(scanner, 2);
+            String firstPlayerSymbol = getPlayerSymbol(scan, 1);
+            String secondPlayerSymbol = getPlayerSymbol(scan, 2);
 
             // Main game loop
             while (true) {
-                makeMove(scanner, firstPlayerSymbol);
+                makeMove(scan, firstPlayerSymbol);
                 if (isGameFinished(firstPlayerSymbol)) {
                     displayResult(firstPlayerSymbol);
                     break;
                 }
 
-                makeMove(scanner, secondPlayerSymbol);
+                makeMove(scan, secondPlayerSymbol);
                 if (isGameFinished(secondPlayerSymbol)) {
                     displayResult(secondPlayerSymbol);
                     break;
                 }
             }
 
-            if (!playAgain(scanner)) {
+            if (!playAgain(scan)) {
                 break;
             }
         }
@@ -60,9 +60,9 @@ public class Game {
         }
     }
 
-    private static String getPlayerSymbol(Scanner scanner, int playerNumber) {
+    private static String getPlayerSymbol(Scanner scan, int playerNumber) {
         while (true) {
-            String userInput = InputHelper.getNonZeroLenString(scanner, "Player " + playerNumber + ", choose X or O");
+            String userInput = InputHelper.getNonZeroLenString(scan, "Player " + playerNumber + ", choose X or O");
             if (userInput.equalsIgnoreCase("X") || userInput.equalsIgnoreCase("O")) {
                 return userInput.toUpperCase();
             } else {
@@ -71,13 +71,13 @@ public class Game {
         }
     }
 
-    private static void makeMove(Scanner scanner, String playerSymbol) {
+    private static void makeMove(Scanner scan, String playerSymbol) {
         int moveRow, moveCol;
         boolean isValidMove;
 
         do {
-            moveRow = InputHelper.getRangedInt(scanner, "Pick a row for your move", 1, ROWS);
-            moveCol = InputHelper.getRangedInt(scanner, "Pick a column for your move", 1, COLS);
+            moveRow = InputHelper.getRangedInt(scan, "Pick a row for your move", 1, ROWS);
+            moveCol = InputHelper.getRangedInt(scan, "Pick a column for your move", 1, COLS);
             isValidMove = isValidGameMove(moveRow - 1, moveCol - 1);
 
             if (!isValidMove) {
@@ -151,7 +151,7 @@ public class Game {
         }
     }
 
-    private static boolean playAgain(Scanner scanner) {
-        return InputHelper.getYNConfirm(scanner, "Would you like to play again? (Y/N)");
+    private static boolean playAgain(Scanner scan) {
+        return InputHelper.getYNConfirm(scan,"Would you like to play again? (Y/N)");
     }
 }
