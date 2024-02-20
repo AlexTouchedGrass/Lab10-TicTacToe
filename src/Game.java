@@ -2,86 +2,156 @@ import java.util.Scanner;
 
 public class Game {
 
-    //Helper Methods
-    public static void clearBoard(){
-        InputHelper.clearBoard();
-    }
-    private static void displayBoard(){InputHelper.printBoard();}
-    private static boolean isValidMove(int row, int col){
-        boolean tof = false;
+    private static final int ROWS = 3;
+    private static final int COLS = 3;
+    private static final String[][] gameBoard = new String[ROWS][COLS];
 
-
-
-        return tof;
-    }
-    private static boolean isWin(String player){
-        boolean tof = false;
-
-        return tof;
-    }
-    private static boolean isColWin(String player){
-        boolean tof = false;
-
-        return tof;
-    }
-    private static boolean isRowWin(String player){
-        boolean tof = false;
-
-        return tof;
-    }
-    private static boolean isDiagonalWin(String player){
-        boolean tof = false;
-
-        return tof;
-    }
-    private static boolean isTie(){
-        boolean tof = false;
-
-        return tof;
-    }
-
-    //MAIN
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in); //Scanner
+        Scanner scanner = new Scanner(System.in);
 
-        //Input Helper
-        InputHelper.getPrettyHeader();
-        //Variables
-        String player1 = "";
-        String player2 = "";
-        boolean allDone = false;
+        // Main game loop
+        while (true) {
+            initializeGame();
 
+            // Players choose symbols (X or O) and the cleared board is displayed
+            String firstPlayerSymbol = getPlayerSymbol(scanner, 1);
+            String secondPlayerSymbol = getPlayerSymbol(scanner, 2);
 
-        //This will hold the entire loop of the game itself.
-        do {
-            boolean doneStart = false;
-            boolean donePlay = false;
-
-            //THIS DO WHILE DECIDES WHO IS X's and O's
-            do {
-                String check = "";
-                System.out.println("\nPlayer 1 is X's and Player 2 is O's.");
-                System.out.println("Please enter 1 or 2 to decide who goes first, 1 for X's and 2 for O's.");
-                check = scan.nextLine();
-                if (check.equalsIgnoreCase("X") ) {
-                    System.out.println("Player 1 will be X's.\nPlayer 2 will be O's");
-                    doneStart = true;
-                    player1 = "X";
-                    player2 = "O";
-                } else if (check.equalsIgnoreCase("O")){
-                    System.out.println("Player 1 will be O's.\nPlayer 2 will be X's.");
-                    doneStart = true;
-                    player1 = "O";
-                    player2 = "X";
-                } else {
-                    System.out.println("That is not an X or an O, try again.");
+            // Main game loop
+            while (true) {
+                makeMove(scanner, firstPlayerSymbol);
+                if (isGameFinished(firstPlayerSymbol)) {
+                    displayResult(firstPlayerSymbol);
+                    break;
                 }
-            } while(!doneStart);
 
-            //Start of a game.
-            displayBoard();
+                makeMove(scanner, secondPlayerSymbol);
+                if (isGameFinished(secondPlayerSymbol)) {
+                    displayResult(secondPlayerSymbol);
+                    break;
+                }
+            }
 
-        } while (!allDone);
+            if (!playAgain(scanner)) {
+                break;
+            }
+        }
+    }
 
+    private static void initializeGame() {
+        clearGameBoard();
+        displayGameBoard();
+    }
+
+    private static void clearGameBoard() {
+        for (int row = 0; row < gameBoard.length; row++) {
+            for (int col = 0; col < gameBoard[0].length; col++) {
+                gameBoard[row][col] = "-";
+            }
+        }
+    }
+
+    private static void displayGameBoard() {
+        for (int row = 0; row < gameBoard.length; row++) {
+            for (int col = 0; col < gameBoard[0].length; col++) {
+                System.out.print(gameBoard[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private static String getPlayerSymbol(Scanner scanner, int playerNumber) {
+        while (true) {
+            String userInput = InputHelper.getNonZeroLenString(scanner, "Player " + playerNumber + ", choose X or O");
+            if (userInput.equalsIgnoreCase("X") || userInput.equalsIgnoreCase("O")) {
+                return userInput.toUpperCase();
+            } else {
+                System.out.println("Invalid input. Please choose X or O.");
+            }
+        }
+    }
+
+    private static void makeMove(Scanner scanner, String playerSymbol) {
+        int moveRow, moveCol;
+        boolean isValidMove;
+
+        do {
+            moveRow = InputHelper.getRangedInt(scanner, "Pick a row for your move", 1, ROWS);
+            moveCol = InputHelper.getRangedInt(scanner, "Pick a column for your move", 1, COLS);
+            isValidMove = isValidGameMove(moveRow - 1, moveCol - 1);
+
+            if (!isValidMove) {
+                System.out.println("That move is already taken");
+            }
+        } while (!isValidMove);
+
+        gameBoard[moveRow - 1][moveCol - 1] = playerSymbol;
+        displayGameBoard();
+    }
+
+    private static boolean isValidGameMove(int row, int col) {
+        return gameBoard[row][col].equals("-");
+    }
+
+    private static boolean isGameFinished(String playerSymbol) {
+        return isColWin(playerSymbol) || isRowWin(playerSymbol) || isDiagonalWin(playerSymbol) || isGameTie();
+    }
+
+    private static boolean isColWin(String playerSymbol) {
+        for (int col = 0; col < COLS; col++) {
+            int counter = 0;
+            for (int row = 0; row < ROWS; row++) {
+                if (gameBoard[row][col].equals(playerSymbol)) {
+                    counter++;
+                }
+                if (counter == 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isRowWin(String playerSymbol) {
+        for (int row = 0; row < ROWS; row++) {
+            int counter = 0;
+            for (int col = 0; col < COLS; col++) {
+                if (gameBoard[row][col].equals(playerSymbol)) {
+                    counter++;
+                }
+                if (counter == 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean isDiagonalWin(String playerSymbol) {
+        return (gameBoard[0][0].equals(playerSymbol) && gameBoard[2][2].equals(playerSymbol) && gameBoard[1][1].equals(playerSymbol))
+                || (gameBoard[2][0].equals(playerSymbol) && gameBoard[0][2].equals(playerSymbol) && gameBoard[1][1].equals(playerSymbol));
+    }
+
+    private static boolean isGameTie() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                if (gameBoard[row][col].equals("-")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static void displayResult(String playerSymbol) {
+        if (isGameTie()) {
+            System.out.println("It's a Tie!");
+        } else {
+            System.out.println("Player with symbol " + playerSymbol + " Wins!");
+        }
+    }
+
+    private static boolean playAgain(Scanner scanner) {
+        return InputHelper.getYNConfirm(scanner, "Would you like to play again? (Y/N)");
     }
 }
